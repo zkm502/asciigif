@@ -1,0 +1,23 @@
+#!/bin/bash
+
+wget -O gifs --user-agent='linux:de.dompasch.asciigif:0.1 (by /u/sirerichbikendom)' https://www.reddit.com/r/gifs > /dev/null 2>&1
+LINK=$(cat gifs | grep -oP "http:\S*?imgur\S*?.gifv" | sort -u | sort -R | head -1 | sed 's/gifv/webm/g')
+wget -O in.gifv $LINK > /dev/null 2>&1
+
+GIF=in.gif
+VID=in.gifv
+FRAMES=gifimgout%05d.jpg
+
+rm gifimgout*.jpg 2> /dev/null
+
+if [ -f $VID ]; then
+	ffmpeg -i $VID $FRAMES > /dev/null 2>&1
+elif [ -f $GIF ]; then
+	convert -coalesce $GIF $FRAMES > /dev/null 2>&1
+fi
+
+for img in gifimgout*.jpg; do
+	jp2a -f --grayscale $img 
+	sleep 0.05
+	clear
+done

@@ -26,8 +26,9 @@ if [[ "$1" != "" ]]; then
     for img in gifimgout*.jpg; do
         jp2a -f $colors $img
         sleep $speed
-        clear
+        printf '\033[H' #Uses ANSI sequence to smoth playback on slower tty's
     done
+    clear
 
     # Tidy up
     rm gifimgout*.jpg gifs in.gif in.gifv 2> /dev/null
